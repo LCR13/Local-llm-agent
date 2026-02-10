@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+python_env/
+venv/
+chroma
+.env
+*.gguf
+*.bin
+*.db
+config.json
