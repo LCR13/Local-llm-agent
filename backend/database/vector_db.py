@@ -6,7 +6,7 @@ from datetime import datetime
 
 #initializing client, path is chroma by default, sqlite as db provider
 #default embedding model for chroma is MiniLM-L6-v2
-client = chromadb.PersistentClient()
+client = chromadb.HttpClient(host='chroma', port=8000)
 
 chat_collection_name = 'chat_history'
 

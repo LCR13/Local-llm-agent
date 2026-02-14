@@ -3,7 +3,7 @@ import requests
 import re
 import random
 import time
-from ddgs import DDGS
+from duckduckgo_search import DDGS
 
 def clean_trafilatura_xml(xml_text):
     if not xml_text: return ""   

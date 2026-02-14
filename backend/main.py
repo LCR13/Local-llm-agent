@@ -82,8 +82,8 @@ def chat(user_input: UserInput):
         print(f'Iteration {i+1}, Dispatcher:\n')
         dispatcher_response = dispatcher_agent.generate_response(context=session_context)
         chosen_agent_name = dispatcher_response.response
-        session_context.append({"role": "assistant",
-                                 "content": f"Dispatcher thoughts: {dispatcher_response.chain_of_thought}\nChosen agent: {chosen_agent_name}"})
+        #session_context.append({"role": "assistant",
+        #                         "content": f"Dispatcher thoughts: {dispatcher_response.chain_of_thought}\nChosen agent: {chosen_agent_name}"})
         agent_class = AGENT_REGISTRY.get(chosen_agent_name)
         if chosen_agent_name == "chat":
             break
@@ -94,6 +94,7 @@ def chat(user_input: UserInput):
             tool_output = add_tool_notation(agent_response.tool_output, chosen_agent_name, agent_response.tool_input)
             session_context.append({"role": "user", 
                                     "content": f"{tool_output}"})
+    #final_context = context_cleaning(session_context)
     final_context = context_cleaning(session_context)
     final_agent = ChatAgent(model=model, rag_db_memory=rag_db_memory, user_input=user_input)
     final_response = final_agent.generate_response(context=final_context).response
@@ -103,9 +104,11 @@ def chat(user_input: UserInput):
 
     response_dict = {"role":"assistant", "content": final_response, "timestamp":now_timestamp}
     return response_dict
+
 @app.get('/history')
 def get_history():
     return get_chat_history()
+
 @app.get('/reset')
 def reset_chat():
     db_chat_reset()

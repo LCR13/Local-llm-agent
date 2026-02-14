@@ -11,8 +11,7 @@ User can tweak following response generating parameters:
 
 How to use:
 Path to model in .gguf extension is specified in config.json file (there is an template, just change the name to config.json and specify parameters suitable to your's machine)
-Package requierements for app building specified in requirements.txt
-Right now there are many critical parameters that are hardcoded with accordance to my device and the model i use, so it's practically unusable until this issue solved.
-To install llama-cpp-python follow instruction from repository: https://github.com/abetlen/llama-cpp-python/tree/main
 
-Docker file will be added after there is at least some features
+To run:
+Use docker compose up --build in core folder
+Right now it's installing 12.4 cuda version distro, 

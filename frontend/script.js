@@ -7,6 +7,14 @@ const promptText = document.getElementById('system-prompt-text');
 const promptName = document.getElementById('new-prompt-name');
 const chatBox = document.getElementById('chat-container');
 var savedPrompts = []
+
+function updateSystemPrompt(val) {
+    const selected = savedPrompts.find(p => p.name === promptSelect.value);
+    if (selected) {
+        selected.content = val;
+    }
+}
+
 function handleEnter(e) {
     if (e.key === 'Enter') sendMessage();
 }
@@ -15,7 +23,7 @@ var chatHistory = []
 
 async function get_chat_history(){    
     try {
-        const response = await fetch("http://localhost:8000/history", {
+        const response = await fetch("/history", {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
@@ -23,7 +31,7 @@ async function get_chat_history(){
         return data;
     }
     catch(error){
-        addMessage("Error: " + error.message, 'assistant');
+        add_message("Error: " + error.message, 'assistant');
         return [];
     }
 }
@@ -36,6 +44,7 @@ window.onload = () => {
     initChat();
     loadPrompts();
 }
+
 promptText.oninput = function() {
     updateSystemPrompt(this.value);
 }
@@ -59,9 +68,14 @@ function renderChat() {
 //calls db to clear chat + rerenders
 async function clearChat() {
     try {
-        const response = await fetch("http://localhost:8000/reset", {
+        const response = await fetch("/reset", {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: { 
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            }
         });
         if(response.ok){
             const chatBox = document.getElementById('chat-container');
@@ -149,7 +163,7 @@ async function sendMessage() {
     sendBtn.disabled = true;
     sendBtn.innerText = "THINKING...";
     try {
-        const response = await fetch("http://localhost:8000/chat", {
+        const response = await fetch("/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 

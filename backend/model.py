@@ -50,8 +50,9 @@ class llm_model:
             model_path=model_path,
             n_ctx=settings.get('n_ctx', 8192),
             n_gpu_layers=settings.get('n_gpu_layers', -1),
-            verbose=settings.get('varbose', False),
-            chat_format='llama-3'
+            verbose=bool(settings.get('verbose', False)),
+            chat_format='llama-3',
+            use_mmap=False
         )
         return llm
 
