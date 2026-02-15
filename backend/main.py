@@ -68,11 +68,16 @@ def context_cleaning(context):
 @app.post('/chat')
 def chat(user_input: UserInput):
     now_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    user_query = f'Current Date: {now_timestamp}\n{user_input.message}'
-    #saving last user message to db
-    save_message_db(msg=user_query, role='user')
+    user_query = f'Current Timestamp: {now_timestamp}\n{user_input.message}'
+
     #getting chat history from db in the form of the list of dictionaries
     session_context = get_chat_history()
+
+    session_context.append({"role": "user", "content": user_query})
+
+    #saving latest user message to db
+    save_message_db(msg=user_query, role='user')
+
     #getting rag memory
     rag_db_memory = get_memory_block(user_query)
     
@@ -92,10 +97,9 @@ def chat(user_input: UserInput):
             agent_instance = agent_class(model=model, rag_db_memory=rag_db_memory, user_input=user_input)
             agent_response = agent_instance.generate_response(context=session_context)
             tool_output = add_tool_notation(agent_response.tool_output, chosen_agent_name, agent_response.tool_input)
-            session_context.append({"role": "user", 
-                                    "content": f"{tool_output}"})
+            session_context.append(tool_output)
     #final_context = context_cleaning(session_context)
-    final_context = context_cleaning(session_context)
+    final_context = session_context
     final_agent = ChatAgent(model=model, rag_db_memory=rag_db_memory, user_input=user_input)
     final_response = final_agent.generate_response(context=final_context).response
 
