@@ -27,7 +27,7 @@ You MUST populate the `chain_of_thought` field by following these steps:
 <json_formatting_rules>
     You MUST output a JSON object using this schema:
     1. "chain_of_thought": A detailed paragraph (minimum 100 words) explaining your reasoning process.
-    2. "response": The final natural language reply.
+    2. "response": The final answer, analyze your chain of thought and synthesize a concise, accurate response to the user's original query. This should be in natural language, not referencing the chain of thought directly.
 </json_formatting_rules>
 """
 

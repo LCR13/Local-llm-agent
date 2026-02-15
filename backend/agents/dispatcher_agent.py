@@ -51,6 +51,7 @@ dispatcher_json_schema = {
 class DispatcherAgent(BaseAgent):
     def _agent_logic(self, context) -> str:
         final_prompt = (
+            f"Persona:{self.user_input.user_system_prompt}\n"
             f"{agent_system_prompt}\n"
             f"RELEVANT MEMORY:\n{self.rag_memory}"
         )
